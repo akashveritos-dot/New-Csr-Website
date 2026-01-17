@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+
+# Disallow access to sensitive directories
+Disallow: /admin/
+Disallow: /includes/
+Disallow: /config/
+Disallow: /backup/
+Disallow: /cgi-bin/
+Disallow: /*.php$
+Disallow: /*.sql$
+Disallow: /*.log$
+
+# Sitemap location
+Sitemap: https://yourdomain.com/sitemap.xml

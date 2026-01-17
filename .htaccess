@@ -1,0 +1,39 @@
+# Enable security headers
+<IfModule mod_headers.c>
+    # Protect against XSS attacks
+    Header set X-XSS-Protection "1; mode=block"
+    
+    # Prevent MIME type sniffing
+    Header set X-Content-Type-Options "nosniff"
+    
+    # Enable X-Frame-Options to prevent clickjacking
+    Header always append X-Frame-Options SAMEORIGIN
+    
+    # Enable HSTS (HTTP Strict Transport Security)
+    Header set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    
+    # Enable Content Security Policy (CSP)
+    Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:;"
+</IfModule>
+
+# Disable directory browsing
+Options -Indexes
+
+# Protect against common vulnerabilities
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Block access to hidden files and directories
+    RewriteCond %{SCRIPT_FILENAME} -d [OR]
+    RewriteCond %{SCRIPT_FILENAME} -f
+    RewriteRule "(^|/)\." - [F]
+    
+    # Block access to sensitive files
+    <FilesMatch "^\.|^composer\.json|^composer\.lock|^package\.json|^package-lock\.json|^web\.config$|^\.htaccess$">
+        Order allow,deny
+        Deny from all
+    </FilesMatch>
+</IfModule>
+
+# Disable server signature
+ServerSignature Off
